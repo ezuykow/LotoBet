@@ -68,7 +68,7 @@ public class Top3PageParser {
             Top3Game newGame = new Top3Game(
                     gameNumber,
                     parseNumbers(gameXPath, elemDiv),
-                    parseDateTimeText(gameXPath, elemDiv)
+                    parseDateTime(gameXPath, elemDiv)
             );
             if (numbersParsed) {
                 games.add(newGame);
@@ -102,7 +102,7 @@ public class Top3PageParser {
         return numbers;
     }
 
-    private LocalDateTime parseDateTimeText(String elemXPath, HtmlDivision elemDiv) {
+    private LocalDateTime parseDateTime(String elemXPath, HtmlDivision elemDiv) {
         HtmlDivision div = elemDiv.getFirstByXPath(elemXPath + Top3Constant.GAME_TIME_XPATH_POSTFIX);
         return LocalDateTime.parse(div.getVisibleText(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
     }
