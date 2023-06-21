@@ -1,0 +1,12 @@
+meta:
+  environment: jvm
+  toolchain:
+    name: gradle
+    version: 17
+build:
+  artifacts:
+    build/libs/*.jar: /
+run:
+  jarName: build/libs/LotoBet-1.0.jar
+  persistenceMount: /data
+  containerPort: 80
