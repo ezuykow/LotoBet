@@ -1,7 +1,7 @@
 package ru.ezuykow.lotobet.configs;
 
 import com.pengrad.telegrambot.TelegramBot;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,13 +9,14 @@ import org.springframework.context.annotation.Configuration;
  * @author ezuykow
  */
 @Configuration
+@AllArgsConstructor
 public class AppConfig {
 
-    @Value("${telegram.bot.token}")
-    private String token;
+    private final Properties properties;
 
     @Bean
     public TelegramBot telegramBot() {
-        return new TelegramBot(token);
+        return new TelegramBot(properties.getProperty("telegram.bot.token"));
     }
+
 }
