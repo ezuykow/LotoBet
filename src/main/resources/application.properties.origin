@@ -1,0 +1,5 @@
+telegram.bot.token=
+telegram.chat.id=
+
+logging.level.com.gargoylesoftware=off
+logging.level.org.apache.http=off
