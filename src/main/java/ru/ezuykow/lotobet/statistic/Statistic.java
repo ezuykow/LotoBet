@@ -35,7 +35,10 @@ public class Statistic {
     }
 
     public String createStatsMsg() {
-        return "";
+        return "Bets count: " + betsCount + "\n" +
+                "Looses count: " + loosesCount + "\n" +
+                "Bank status: " + (bankStatus / 1000) + "." +
+                (bankStatus % 1000) + " x nominal\n";
     }
 
     //-----------------API END-----------------
