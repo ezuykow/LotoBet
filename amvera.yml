@@ -7,6 +7,6 @@ build:
   artifacts:
     build/libs/*.jar: /
 run:
-  jarName: build/libs/LotoBet-1.0.jar
+  jarName: LotoBet-1.0.jar
   persistenceMount: /data
   containerPort: 80
