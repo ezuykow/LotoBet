@@ -113,11 +113,12 @@ public class Top3PageParser {
         if (timeToNextGameText.contains("--")) {
             return 60_000;
         } else {
-            int minutesToNextGame = Integer.parseInt(timeToNextGameText.substring(0, timeToNextGameText.indexOf(":")));
-            if (timeToNextGameText.matches(".+:.+:.+")) {
-                minutesToNextGame *= 60;
-            }
-            return minutesToNextGame * 60_000L;
+            String[] parts = timeToNextGameText.split(":");
+            int secondsToNextGame = Integer.parseInt(parts[parts.length - 1])
+                    + 60 * ((parts.length == 2)
+                        ? Integer.parseInt(parts[parts.length - 2])
+                        : Integer.parseInt(parts[parts.length - 2]) + 60 * Integer.parseInt(parts[parts.length - 3]));
+            return secondsToNextGame * 1_000L;
         }
     }
 
