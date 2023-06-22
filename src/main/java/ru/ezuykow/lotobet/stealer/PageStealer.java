@@ -44,5 +44,6 @@ public class PageStealer {
         client.getOptions().setThrowExceptionOnFailingStatusCode(false);
         client.setJavaScriptErrorListener(new SilentJavaScriptErrorListener());
         client.getOptions().setJavaScriptEnabled(true);
+        client.getOptions().setHistoryPageCacheLimit(2);
     }
 }

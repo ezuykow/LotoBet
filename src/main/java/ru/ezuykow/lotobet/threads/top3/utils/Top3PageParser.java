@@ -114,6 +114,9 @@ public class Top3PageParser {
             return 60_000;
         } else {
             int minutesToNextGame = Integer.parseInt(timeToNextGameText.substring(0, timeToNextGameText.indexOf(":")));
+            if (timeToNextGameText.matches(".+:.+:.+")) {
+                minutesToNextGame *= 60;
+            }
             return minutesToNextGame * 60_000L;
         }
     }
@@ -123,9 +126,9 @@ public class Top3PageParser {
             trimList();
             digitInARowSignaliser.checkNewGameDigits(games, millisToSleep);
             millisToSleep += (Top3Constant.WAITING_STEP_MINUTES_SHIFT * 60_000);
-        } else {
+        }/* else {
             millisToSleep = 60_000;
-        }
+        }*/
         log.info("Sleep " + (millisToSleep/60_000) + " mins");
     }
 
