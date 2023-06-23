@@ -3,10 +3,11 @@ package ru.ezuykow.lotobet.threads.top3.signalisers;
 import lombok.extern.java.Log;
 import ru.ezuykow.lotobet.messages.MessageSender;
 import ru.ezuykow.lotobet.statistic.Statistic;
-import ru.ezuykow.lotobet.threads.top3.utils.Top3Constant;
 import ru.ezuykow.lotobet.threads.top3.utils.Top3Game;
 
 import java.util.*;
+
+import static ru.ezuykow.lotobet.threads.top3.utils.Top3Constant.*;
 
 /**
  * @author ezuykow
@@ -46,9 +47,9 @@ public class DigitInARowSignaliser {
             if (!lastGameUniqueNums.contains(d.getKey())) {
                 if (d.getValue() > 2) {
                     switch (d.getValue()) {
-                        case 3 -> statistic.setStatistic(1, 0, Top3Constant.BANK_DIFFER);
-                        case 4 -> statistic.setStatistic(1, 1, (- 1000 + 3 * Top3Constant.BANK_DIFFER));
-                        default -> statistic.setStatistic(1, 1, -3000);
+                        case 3 -> statistic.setStatistic(1, 0, BANK_DIFFER);
+                        case 4 -> statistic.setStatistic(1, 1, (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
+                        default -> statistic.setStatistic(1, 1, SECOND_BET_MULTIPLICATION * FIRST_BET);
                     }
                     msgSender.sendStats();
                 }
@@ -63,8 +64,9 @@ public class DigitInARowSignaliser {
             switch (e.getValue()) {
                 case 3 -> msgSender.send("Digit " + e.getKey() + " dropped 3 times in a row. Bet 1 x nominal to game "
                         + (lastGame.getGameNumber() + 1) + " in " + waitingTimeMillis/60_000 + " minutes");
-                case 4 -> msgSender.send("Digit " + e.getKey() + " dropped 4 times in a row. Bet 3 x nominal to game "
-                        + (lastGame.getGameNumber() + 1) + " in " + waitingTimeMillis/60_000 + " minutes");
+                case 4 -> msgSender.send("Digit " + e.getKey() + " dropped 4 times in a row. Bet "
+                        + SECOND_BET_MULTIPLICATION + " x nominal to game " + (lastGame.getGameNumber() + 1)
+                        + " in " + waitingTimeMillis/60_000 + " minutes");
                 case 5 -> msgSender.send("Digit " + e.getKey() + " dropped 5 times in a row. DONT TOUCH THIS EVIL DIGIT");
             }
         }
