@@ -34,6 +34,14 @@ public class DigitInARowSignaliser {
         Set<Integer> lastGameUniqueNums = new HashSet<>(List.of(lastGame.getNumbers()));
         log.info("Checking Top3 game digits " + lastGameUniqueNums);
 
+        checkDigitsInRow(lastGameUniqueNums);
+        checkPreviousBets(lastGameUniqueNums);
+        checkAndSendNewBets(lastGame, waitingTimeMillis);
+    }
+
+    //-----------------API END-----------------
+
+    private void checkDigitsInRow(Set<Integer> lastGameUniqueNums) {
         for (Integer digit : lastGameUniqueNums) {
             if (digitsInRow.containsKey(digit)) {
                 digitsInRow.put(digit, digitsInRow.get(digit) + 1);
@@ -41,37 +49,52 @@ public class DigitInARowSignaliser {
                 digitsInRow.put(digit, 1);
             }
         }
+    }
 
+    private void checkPreviousBets(Set<Integer> lastGameUniqueNums) {
         List<Integer> digitsToDelete = new ArrayList<>();
         for (Map.Entry<Integer, Integer> d : digitsInRow.entrySet()) {
             if (!lastGameUniqueNums.contains(d.getKey())) {
                 if (d.getValue() > 2) {
                     switch (d.getValue()) {
-                        case 3 -> statistic.setStatistic(1, 0, BANK_DIFFER);
-                        case 4 -> statistic.setStatistic(1, 1, (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
-                        case 5 -> statistic.setStatistic(1, 2, (-SECOND_BET_MULTIPLICATION * FIRST_BET));
+                        case 3 -> {
+                            statistic.setStatistic(1, 0, BANK_DIFFER);
+                            digitsToDelete.add(d.getKey());
+                        }
+                        case 4 -> {
+                            statistic.setStatistic(1, 1, (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
+                            digitsToDelete.add(d.getKey());
+                        }
+                        case 5 -> {
+                            statistic.setStatistic(1, 2, (-SECOND_BET_MULTIPLICATION * FIRST_BET));
+                            digitsInRow.put(d.getKey(), 3);
+                        }
                     }
                     msgSender.sendStats();
                 }
-                digitsToDelete.add(d.getKey());
             }
         }
         for (Integer i : digitsToDelete) {
             digitsInRow.remove(i);
         }
+    }
 
+    private void checkAndSendNewBets(Top3Game lastGame, long waitingTimeMillis) {
         for (Map.Entry<Integer, Integer> e : digitsInRow.entrySet()) {
             switch (e.getValue()) {
-                case 3 -> msgSender.send("Digit " + e.getKey() + " dropped 3 times in a row. Bet 1 x nominal to game "
-                        + (lastGame.getGameNumber() + 1) + " in " + waitingTimeMillis/60_000 + " minutes");
-                case 4 -> msgSender.send("Digit " + e.getKey() + " dropped 4 times in a row. Bet "
-                        + SECOND_BET_MULTIPLICATION + " x nominal to game " + (lastGame.getGameNumber() + 1)
-                        + " in " + waitingTimeMillis/60_000 + " minutes");
-                case 5 -> msgSender.send("Digit " + e.getKey() + " dropped 5 times in a row. DONT TOUCH THIS EVIL DIGIT");
+                case 3 -> msgSender.send(
+                        "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
+                                "When: in " + waitingTimeMillis / 60_000 + " minutes\n" +
+                                "Event: digit " + e.getKey() + " fall out - NO\n" +
+                                "Coefficient: " + DIGIT_NOT_FALL_OUT_COEF + "\n" +
+                                "Bet: 1 x nominal");
+                case 4 -> msgSender.send(
+                        "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
+                                "When: in " + waitingTimeMillis / 60_000 + " minutes\n" +
+                                "Event: digit " + e.getKey() + " fall out - NO\n" +
+                                "Coefficient: " + DIGIT_NOT_FALL_OUT_COEF + "\n" +
+                                "Bet: " + SECOND_BET_MULTIPLICATION + " x nominal");
             }
         }
     }
-
-    //-----------------API END-----------------
-
 }

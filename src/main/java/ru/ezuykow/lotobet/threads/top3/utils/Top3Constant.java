@@ -13,6 +13,7 @@ public class Top3Constant {
     public static final String GAME_NUMBER_XPATH_POSTFIX = "/div[2]/a";
     public static final String NUMBERS_SPAN_XPATH_POSTFIX = "/div[3]/div[1]/div[1]/span";
     public static final String TIMER_SPAN_XPATH = "/html/body/div[1]/div[1]/div[8]/div[5]/div[3]/div/div[19]/div[4]/div/span";
+    public static final double DIGIT_NOT_FALL_OUT_COEF = 1.331D;
     public static final int MAX_GAMES_IN_MEMORY = 10;
     public static final int WAITING_STEP_MINUTES_SHIFT = 3;
     public static final int FIRST_BET = 1000;
