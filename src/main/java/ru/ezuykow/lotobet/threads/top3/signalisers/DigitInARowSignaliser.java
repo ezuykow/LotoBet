@@ -2,11 +2,12 @@ package ru.ezuykow.lotobet.threads.top3.signalisers;
 
 import lombok.extern.java.Log;
 import ru.ezuykow.lotobet.messages.MessageSender;
-import ru.ezuykow.lotobet.statistic.Statistic;
+import ru.ezuykow.lotobet.statistic.StatisticService;
 import ru.ezuykow.lotobet.threads.top3.utils.Top3Game;
 
 import java.util.*;
 
+import static ru.ezuykow.lotobet.statistic.StatisticService.StatisticName.THEORY_A;
 import static ru.ezuykow.lotobet.threads.top3.utils.Top3Constant.*;
 
 /**
@@ -16,11 +17,11 @@ import static ru.ezuykow.lotobet.threads.top3.utils.Top3Constant.*;
 public class DigitInARowSignaliser {
 
     private final MessageSender msgSender;
-    private final Statistic statistic;
+    private final StatisticService statistic;
 
     private final Map<Integer, Integer> digitsInRow;
 
-    public DigitInARowSignaliser(MessageSender msgSender, Statistic statistic) {
+    public DigitInARowSignaliser(MessageSender msgSender, StatisticService statistic) {
         this.msgSender = msgSender;
         this.statistic = statistic;
 
@@ -58,19 +59,24 @@ public class DigitInARowSignaliser {
                 if (d.getValue() > 2) {
                     switch (d.getValue()) {
                         case 3 -> {
-                            statistic.setStatistic(1, 0, BANK_DIFFER);
+                            statistic.setStatistic(THEORY_A, 1, 0,
+                                    BANK_DIFFER);
                             digitsToDelete.add(d.getKey());
                         }
                         case 4 -> {
-                            statistic.setStatistic(1, 1, (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
+                            statistic.setStatistic(THEORY_A, 1, 1,
+                                    (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
                             digitsToDelete.add(d.getKey());
                         }
                         case 5 -> {
-                            statistic.setStatistic(1, 2, (-SECOND_BET_MULTIPLICATION * FIRST_BET));
+                            statistic.setStatistic(THEORY_A, 1, 2,
+                                    (-SECOND_BET_MULTIPLICATION * FIRST_BET));
                             digitsInRow.put(d.getKey(), 3);
                         }
                     }
                     msgSender.sendStats();
+                } else {
+                    digitsToDelete.add(d.getKey());
                 }
             }
         }

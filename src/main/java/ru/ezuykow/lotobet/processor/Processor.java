@@ -3,7 +3,7 @@ package ru.ezuykow.lotobet.processor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.ezuykow.lotobet.messages.MessageSender;
-import ru.ezuykow.lotobet.statistic.Statistic;
+import ru.ezuykow.lotobet.statistic.StatisticService;
 import ru.ezuykow.lotobet.stealer.PageStealer;
 import ru.ezuykow.lotobet.threads.top3.Top3Thread;
 
@@ -15,7 +15,7 @@ import ru.ezuykow.lotobet.threads.top3.Top3Thread;
 public class Processor {
 
     private final MessageSender msgSender;
-    private final Statistic statistic;
+    private final StatisticService statistic;
     private final PageStealer pageStealer;
 
     private boolean isStarted = false;

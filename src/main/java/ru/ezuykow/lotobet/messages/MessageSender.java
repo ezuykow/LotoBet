@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.request.DeleteMessage;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.springframework.stereotype.Component;
 import ru.ezuykow.lotobet.configs.Properties;
-import ru.ezuykow.lotobet.statistic.Statistic;
+import ru.ezuykow.lotobet.statistic.StatisticService;
 
 /**
  * @author ezuykow
@@ -16,9 +16,9 @@ public class MessageSender {
     private final long chatId;
 
     private final TelegramBot bot;
-    private final Statistic statistic;
+    private final StatisticService statistic;
 
-    public MessageSender(TelegramBot bot, Statistic statistic, Properties properties) {
+    public MessageSender(TelegramBot bot, StatisticService statistic, Properties properties) {
         this.bot = bot;
         this.statistic = statistic;
         this.chatId = Long.parseLong(properties.getProperty("telegram.chat.id"));

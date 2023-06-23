@@ -3,7 +3,7 @@ package ru.ezuykow.lotobet.threads.top3;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.java.Log;
 import ru.ezuykow.lotobet.messages.MessageSender;
-import ru.ezuykow.lotobet.statistic.Statistic;
+import ru.ezuykow.lotobet.statistic.StatisticService;
 import ru.ezuykow.lotobet.stealer.PageStealer;
 import ru.ezuykow.lotobet.threads.top3.utils.Top3Constant;
 import ru.ezuykow.lotobet.threads.top3.utils.Top3PageParser;
@@ -19,7 +19,7 @@ public class Top3Thread extends Thread{
     private final PageStealer stealer;
     private final Top3PageParser parser;
 
-    public Top3Thread(MessageSender msgSender, Statistic statistic, PageStealer stealer) {
+    public Top3Thread(MessageSender msgSender, StatisticService statistic, PageStealer stealer) {
         this.stealer = stealer;
 
         this.setName("Top3Thread");

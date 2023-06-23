@@ -7,7 +7,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import lombok.Getter;
 import lombok.extern.java.Log;
 import ru.ezuykow.lotobet.messages.MessageSender;
-import ru.ezuykow.lotobet.statistic.Statistic;
+import ru.ezuykow.lotobet.statistic.StatisticService;
 import ru.ezuykow.lotobet.threads.top3.signalisers.DigitInARowSignaliser;
 
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class Top3PageParser {
     @Getter
     private long millisToSleep;
 
-    public Top3PageParser(MessageSender msgSender, Statistic statistic) {
+    public Top3PageParser(MessageSender msgSender, StatisticService statistic) {
         isFirstParsing = true;
         digitInARowSignaliser = new DigitInARowSignaliser(msgSender, statistic);
     }
