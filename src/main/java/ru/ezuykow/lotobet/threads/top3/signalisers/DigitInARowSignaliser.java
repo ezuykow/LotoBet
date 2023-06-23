@@ -49,7 +49,7 @@ public class DigitInARowSignaliser {
                     switch (d.getValue()) {
                         case 3 -> statistic.setStatistic(1, 0, BANK_DIFFER);
                         case 4 -> statistic.setStatistic(1, 1, (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
-                        default -> statistic.setStatistic(1, 1, SECOND_BET_MULTIPLICATION * FIRST_BET);
+                        case 5 -> statistic.setStatistic(1, 2, (-SECOND_BET_MULTIPLICATION * FIRST_BET));
                     }
                     msgSender.sendStats();
                 }
