@@ -16,7 +16,7 @@ public class Top3Constant {
     public static final int MAX_GAMES_IN_MEMORY = 10;
     public static final int WAITING_STEP_MINUTES_SHIFT = 3;
     public static final int FIRST_BET = 1000;
-    public static final int SECOND_BET_MULTIPLICATION = 3;
+    public static final int SECOND_BET_MULTIPLICATION = 4;
     public static final int BANK_DIFFER = 331;
 
 }
