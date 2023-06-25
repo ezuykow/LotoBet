@@ -1,8 +1,8 @@
 package ru.ezuykow.lotobet.messages;
 
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.request.DeleteMessage;
-import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.*;
+import com.pengrad.telegrambot.response.SendResponse;
 import org.springframework.stereotype.Component;
 import ru.ezuykow.lotobet.configs.Properties;
 import ru.ezuykow.lotobet.statistic.StatisticService;
@@ -18,6 +18,8 @@ public class MessageSender {
     private final TelegramBot bot;
     private final StatisticService statistic;
 
+    private int statisticMsgId;
+
     public MessageSender(TelegramBot bot, StatisticService statistic, Properties properties) {
         this.bot = bot;
         this.statistic = statistic;
@@ -31,7 +33,15 @@ public class MessageSender {
     }
 
     public void sendStats() {
-        bot.execute(new SendMessage(chatId, statistic.createStatsMsg()));
+        SendResponse response = bot.execute(new SendMessage(chatId, statistic.createStatsMsg()));
+        if (response.isOk()) {
+            statisticMsgId = response.message().messageId();
+            pinOnlyStatMsg();
+        }
+    }
+
+    public void editStats() {
+        bot.execute(new EditMessageText(chatId, statisticMsgId, statistic.createStatsMsg()));
     }
 
     public void delete(int msgId) {
@@ -40,4 +50,8 @@ public class MessageSender {
 
     //-----------------API END-----------------
 
+    private void pinOnlyStatMsg() {
+        bot.execute(new UnpinAllChatMessages(chatId));
+        bot.execute(new PinChatMessage(chatId, statisticMsgId));
+    }
 }

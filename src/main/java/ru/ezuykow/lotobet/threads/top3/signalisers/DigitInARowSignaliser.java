@@ -63,7 +63,7 @@ public class DigitInARowSignaliser {
                         case 4 -> statistic.setStatistic(THEORY_A, 1, 1,
                                 (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
                     }
-                    msgSender.sendStats();
+                    msgSender.editStats();
                 }
                 digitsToDelete.add(d.getKey());
             }
