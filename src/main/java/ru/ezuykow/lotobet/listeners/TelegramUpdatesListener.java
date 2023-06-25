@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.ezuykow.lotobet.messages.MessageSender;
 import ru.ezuykow.lotobet.processor.Processor;
+import ru.ezuykow.lotobet.statistic.StatisticService;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class TelegramUpdatesListener implements UpdatesListener {
     private final TelegramBot bot;
     private final Processor processor;
     private final MessageSender msgSender;
+    private final StatisticService statisticService;
 
     @PostConstruct
     public void init() {
@@ -52,6 +54,10 @@ public class TelegramUpdatesListener implements UpdatesListener {
                 case "/stat" -> {
                     msgSender.delete(update.message().messageId());
                     msgSender.sendStats();
+                }
+                case "/clearstat" -> {
+                    msgSender.delete(update.message().messageId());
+                    statisticService.clearStatistics();
                 }
             }
         }

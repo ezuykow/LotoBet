@@ -42,10 +42,13 @@ public class StatisticService {
 
     public String createStatsMsg() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, StatisticModel> e : statistics.entrySet()) {
-            sb.append(e.getValue().toString());
-        }
+        statistics.values().forEach(s -> sb.append(s.toString()));
         return sb.toString();
+    }
+
+    public void clearStatistics() {
+        statistics.values().forEach(s -> s.setStatistic(0, 0, 0));
+        writeToFile();
     }
 
     //-----------------API END-----------------
@@ -64,10 +67,7 @@ public class StatisticService {
     private void checkFile() {
         try {
             if (statisticFile.createNewFile()) {
-                for (Map.Entry<String, StatisticModel> e : statistics.entrySet()) {
-                    e.getValue().setStatistic(0, 0, 0);
-                }
-                writeToFile();
+                clearStatistics();
             }
         } catch (IOException e) {
             log.warning("Statistic file error");
@@ -111,8 +111,8 @@ public class StatisticService {
 
     private void writeToFile() {
         try (var bw = new BufferedWriter(new FileWriter(statisticFile, false))) {
-            for (Map.Entry<String, StatisticModel> e : statistics.entrySet()) {
-                bw.write(e.getValue().forFile());
+            for (StatisticModel s : statistics.values()) {
+                bw.write(s.forFile());
             }
             bw.flush();
         } catch (IOException e) {
