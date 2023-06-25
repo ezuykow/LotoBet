@@ -58,26 +58,14 @@ public class DigitInARowSignaliser {
             if (!lastGameUniqueNums.contains(d.getKey())) {
                 if (d.getValue() > 2) {
                     switch (d.getValue()) {
-                        case 3 -> {
-                            statistic.setStatistic(THEORY_A, 1, 0,
-                                    BANK_DIFFER);
-                            digitsToDelete.add(d.getKey());
-                        }
-                        case 4 -> {
-                            statistic.setStatistic(THEORY_A, 1, 1,
-                                    (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
-                            digitsToDelete.add(d.getKey());
-                        }
-                        case 5 -> {
-                            statistic.setStatistic(THEORY_A, 1, 2,
-                                    (-SECOND_BET_MULTIPLICATION * FIRST_BET));
-                            digitsInRow.put(d.getKey(), 3);
-                        }
+                        case 3 -> statistic.setStatistic(THEORY_A, 1, 0,
+                                BANK_DIFFER);
+                        case 4 -> statistic.setStatistic(THEORY_A, 1, 1,
+                                (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
                     }
                     msgSender.sendStats();
-                } else {
-                    digitsToDelete.add(d.getKey());
                 }
+                digitsToDelete.add(d.getKey());
             }
         }
         for (Integer i : digitsToDelete) {
@@ -88,13 +76,20 @@ public class DigitInARowSignaliser {
     private void checkAndSendNewBets(Top3Game lastGame, long waitingTimeMillis) {
         for (Map.Entry<Integer, Integer> e : digitsInRow.entrySet()) {
             switch (e.getValue()) {
-                case 3 -> msgSender.send(
+                case 5:
+                    statistic.setStatistic(THEORY_A, 1, 2,
+                            -(SECOND_BET_MULTIPLICATION * FIRST_BET + FIRST_BET));
+                    digitsInRow.put(e.getKey(), 3);
+                case 3:
+                    msgSender.send(
                         "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
                                 "When: in " + waitingTimeMillis / 60_000 + " minutes\n" +
                                 "Event: digit " + e.getKey() + " fall out - NO\n" +
                                 "Coefficient: " + DIGIT_NOT_FALL_OUT_COEF + "\n" +
                                 "Bet: 1 x nominal");
-                case 4 -> msgSender.send(
+                    break;
+                case 4:
+                    msgSender.send(
                         "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
                                 "When: in " + waitingTimeMillis / 60_000 + " minutes\n" +
                                 "Event: digit " + e.getKey() + " fall out - NO\n" +
