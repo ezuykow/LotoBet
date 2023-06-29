@@ -16,7 +16,7 @@ public class StatisticService {
 
     public enum StatisticName {
         GENERAL,
-        THEORY_A,
+        THEORY_A
     }
 
     private static final String STATISTIC_FILE_NAME = "statistic.txt";
@@ -92,13 +92,17 @@ public class StatisticService {
     }
 
     private void readStats(String statisticName, BufferedReader br) throws IOException {
-        StatisticName targetStatisticName = StatisticName.valueOf(statisticName);
-        StatisticModel targetStatistic = statistics.get(targetStatisticName.name());
-        targetStatistic.setStatistic(
-                Integer.parseInt(br.readLine()),
-                Integer.parseInt(br.readLine()),
-                Integer.parseInt(br.readLine())
-        );
+        try {
+            StatisticName targetStatisticName = StatisticName.valueOf(statisticName);
+            StatisticModel targetStatistic = statistics.get(targetStatisticName.name());
+            targetStatistic.setStatistic(
+                    Integer.parseInt(br.readLine()),
+                    Integer.parseInt(br.readLine()),
+                    Integer.parseInt(br.readLine())
+            );
+        } catch (IllegalArgumentException e) {
+            log.warning("Skipping unknown statistic");
+        }
     }
 
     private void refreshStatistic(StatisticModel statistic, int betsShift, int loosesShift, int bankShift) {
