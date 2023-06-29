@@ -52,6 +52,10 @@ public class Top3PageParser {
 
     private void firstParse(HtmlPage page) {
         games = new LinkedList<>();
+        parseGame(page, Top3Constant.FIFTH_ELEM_XPATH);
+        digitInARowSignaliser.checkNewGameDigits(games, millisToSleep);
+        parseGame(page, Top3Constant.FOURTH_ELEM_XPATH);
+        digitInARowSignaliser.checkNewGameDigits(games, millisToSleep);
         parseGame(page, Top3Constant.THIRD_ELEM_XPATH);
         digitInARowSignaliser.checkNewGameDigits(games, millisToSleep);
         parseGame(page, Top3Constant.SECOND_ELEM_XPATH);

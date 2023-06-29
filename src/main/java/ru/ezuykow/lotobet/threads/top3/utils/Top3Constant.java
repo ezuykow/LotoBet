@@ -9,6 +9,8 @@ public class Top3Constant {
     public static final String FIRST_ELEM_XPATH = "/html/body/div[1]/div[1]/div[6]/div[2]/div[2]/div[2]/div";
     public static final String SECOND_ELEM_XPATH = "/html/body/div[1]/div[1]/div[6]/div[2]/div[2]/div[3]/div";
     public static final String THIRD_ELEM_XPATH = "/html/body/div[1]/div[1]/div[6]/div[2]/div[2]/div[4]/div";
+    public static final String FOURTH_ELEM_XPATH = "/html/body/div[1]/div[1]/div[6]/div[2]/div[2]/div[5]/div";
+    public static final String FIFTH_ELEM_XPATH = "/html/body/div[1]/div[1]/div[6]/div[2]/div[2]/div[6]/div";
     public static final String GAME_TIME_XPATH_POSTFIX = "/div[1]";
     public static final String GAME_NUMBER_XPATH_POSTFIX = "/div[2]/a";
     public static final String NUMBERS_SPAN_XPATH_POSTFIX = "/div[3]/div[1]/div[1]/span";

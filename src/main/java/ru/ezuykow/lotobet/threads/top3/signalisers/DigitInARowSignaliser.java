@@ -8,7 +8,6 @@ import ru.ezuykow.lotobet.threads.top3.utils.Top3Game;
 import java.util.*;
 
 import static ru.ezuykow.lotobet.statistic.StatisticService.StatisticName.THEORY_A;
-import static ru.ezuykow.lotobet.statistic.StatisticService.StatisticName.THEORY_B;
 import static ru.ezuykow.lotobet.threads.top3.utils.Top3Constant.*;
 
 /**
@@ -57,19 +56,15 @@ public class DigitInARowSignaliser {
         List<Integer> digitsToDelete = new ArrayList<>();
         for (Map.Entry<Integer, Integer> d : digitsInRow.entrySet()) {
             if (!lastGameUniqueNums.contains(d.getKey())) {
-                if (d.getValue() > 2) {
-                    switch (d.getValue()) {
-                        case 3 -> {
-                            statistic.setStatistic(THEORY_A, 1, 0, BANK_DIFFER);
-                            statistic.setStatistic(THEORY_B, 1, 0, BANK_DIFFER);
-                        }
-                        case 4 -> {
-                            statistic.setStatistic(THEORY_A, 1, 0,
-                                    (SECOND_BET_MULTIPLICATION * BANK_DIFFER - FIRST_BET));
-                            statistic.setStatistic(THEORY_B, 1, 0, BANK_DIFFER);
-                        }
+                switch (d.getValue()) {
+                    case 4 -> {
+                        statistic.setStatistic(THEORY_A, 1, 0, BANK_DIFFER);
+                        msgSender.editStats();
                     }
-                    msgSender.editStats();
+                    case 5 -> {
+                        statistic.setStatistic(THEORY_A, 1, 1, -FIRST_BET);
+                        msgSender.editStats();
+                    }
                 }
                 digitsToDelete.add(d.getKey());
             }
@@ -82,30 +77,17 @@ public class DigitInARowSignaliser {
     private void checkAndSendNewBets(Top3Game lastGame, long waitingTimeMillis) {
         for (Map.Entry<Integer, Integer> e : digitsInRow.entrySet()) {
             switch (e.getValue()) {
-                case 5:
-                    statistic.setStatistic(THEORY_A, 1, 1, -(SECOND_BET_MULTIPLICATION * FIRST_BET));
-                    statistic.setStatistic(THEORY_B, 1, 1, -FIRST_BET);
-                    digitsInRow.put(e.getKey(), 3);
-                case 3:
-                    msgSender.send(
-                            "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
-                                    "When: in " + waitingTimeMillis / 60_000 + " minutes\n" +
-                                    "Event: digit " + e.getKey() + " fall out - NO\n" +
-                                    "Coefficient: " + DIGIT_NOT_FALL_OUT_COEF + "\n" +
-                                    "THEORY_A Bet: 1 x nominal" + "\n" +
-                                    "THEORY_B Bet: 1 x nominal");
-                    break;
-                case 4:
-                    statistic.setStatistic(THEORY_A, 1, 1, -FIRST_BET);
-                    statistic.setStatistic(THEORY_B, 1, 1, -FIRST_BET);
-                    msgSender.editStats();
-                    msgSender.send(
-                        "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
+                case 4 -> msgSender.send(
+                        "THEORY_A\n" +
+                                "Game: Top3 №" + (lastGame.getGameNumber() + 1) + "\n" +
                                 "When: in " + waitingTimeMillis / 60_000 + " minutes\n" +
                                 "Event: digit " + e.getKey() + " fall out - NO\n" +
                                 "Coefficient: " + DIGIT_NOT_FALL_OUT_COEF + "\n" +
-                                "THEORY_A Bet: " + SECOND_BET_MULTIPLICATION + " x nominal" + "\n" +
-                                "THEORY_B Bet: 1 x nominal");
+                                "Bet: 1 x nominal");
+                case 5 -> {
+                    statistic.setStatistic(THEORY_A, 1, 1, -FIRST_BET);
+                    msgSender.editStats();
+                }
             }
         }
     }

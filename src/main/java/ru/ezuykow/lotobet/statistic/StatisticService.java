@@ -17,7 +17,6 @@ public class StatisticService {
     public enum StatisticName {
         GENERAL,
         THEORY_A,
-        THEORY_B
     }
 
     private static final String STATISTIC_FILE_NAME = "statistic.txt";
